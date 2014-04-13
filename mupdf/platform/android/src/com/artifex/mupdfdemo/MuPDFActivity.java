@@ -61,13 +61,13 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 	private TextView     mPageNumberView;
 	private TextView     mInfoView;
 	private ImageButton  mSearchButton;
-	private ImageButton  mReflowButton;
-	private ImageButton  mOutlineButton;
-	private ImageButton	mMoreButton;
+	//private ImageButton  mReflowButton;
+	//private ImageButton  mOutlineButton;
+	//private ImageButton	mMoreButton;
 	private TextView     mAnnotTypeText;
 	private ImageButton mAnnotButton;
 	private ViewAnimator mTopBarSwitcher;
-	private ImageButton  mLinkButton;
+	//private ImageButton  mLinkButton;
 	private TopBarMode   mTopBarMode = TopBarMode.Main;
 	private AcceptMode   mAcceptMode;
 	private ImageButton  mSearchBack;
@@ -469,11 +469,11 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		});
 
 		// Activate the reflow button
-		mReflowButton.setOnClickListener(new View.OnClickListener() {
+		/*mReflowButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				toggleReflow();
 			}
-		});
+		});*/
 
 		if (core.fileFormat().startsWith("PDF"))
 		{
@@ -544,13 +544,13 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 			}
 		});
 
-		mLinkButton.setOnClickListener(new View.OnClickListener() {
+		/*mLinkButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				setLinkHighlight(!mLinkHighlight);
 			}
-		});
+		});*/
 
-		if (core.hasOutline()) {
+		/*if (core.hasOutline()) {
 			mOutlineButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					OutlineItem outline[] = core.getOutline();
@@ -563,7 +563,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 			});
 		} else {
 			mOutlineButton.setVisibility(View.GONE);
-		}
+		}*/
 
 		// Reenstate last state if it was recorded
 		SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
@@ -614,12 +614,12 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 	{
 		mReflow = reflow;
 		mDocView.setAdapter(mReflow ? new MuPDFReflowAdapter(this, core) : new MuPDFPageAdapter(this, this, core));
-		mReflowButton.setColorFilter(mReflow ? Color.argb(0xFF, 172, 114, 37) : Color.argb(0xFF, 255, 255, 255));
+		//mReflowButton.setColorFilter(mReflow ? Color.argb(0xFF, 172, 114, 37) : Color.argb(0xFF, 255, 255, 255));
 		setButtonEnabled(mAnnotButton, !reflow);
 		setButtonEnabled(mSearchButton, !reflow);
 		if (reflow) setLinkHighlight(false);
-		setButtonEnabled(mLinkButton, !reflow);
-		setButtonEnabled(mMoreButton, !reflow);
+		//setButtonEnabled(mLinkButton, !reflow);
+		//setButtonEnabled(mMoreButton, !reflow);
 		mDocView.refresh(mReflow);
 	}
 
@@ -697,7 +697,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 	private void setLinkHighlight(boolean highlight) {
 		mLinkHighlight = highlight;
 		// LINK_COLOR tint
-		mLinkButton.setColorFilter(highlight ? Color.argb(0xFF, 172, 114, 37) : Color.argb(0xFF, 255, 255, 255));
+		//mLinkButton.setColorFilter(highlight ? Color.argb(0xFF, 172, 114, 37) : Color.argb(0xFF, 255, 255, 255));
 		// Inform pages of the change.
 		mDocView.setLinksEnabled(highlight);
 	}
@@ -847,16 +847,16 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		mPageNumberView = (TextView)mButtonsView.findViewById(R.id.pageNumber);
 		mInfoView = (TextView)mButtonsView.findViewById(R.id.info);
 		mSearchButton = (ImageButton)mButtonsView.findViewById(R.id.searchButton);
-		mReflowButton = (ImageButton)mButtonsView.findViewById(R.id.reflowButton);
-		mOutlineButton = (ImageButton)mButtonsView.findViewById(R.id.outlineButton);
+		//mReflowButton = (ImageButton)mButtonsView.findViewById(R.id.reflowButton);
+		//mOutlineButton = (ImageButton)mButtonsView.findViewById(R.id.outlineButton);
 		mAnnotButton = (ImageButton)mButtonsView.findViewById(R.id.editAnnotButton);
 		mAnnotTypeText = (TextView)mButtonsView.findViewById(R.id.annotType);
 		mTopBarSwitcher = (ViewAnimator)mButtonsView.findViewById(R.id.switcher);
 		mSearchBack = (ImageButton)mButtonsView.findViewById(R.id.searchBack);
 		mSearchFwd = (ImageButton)mButtonsView.findViewById(R.id.searchForward);
 		mSearchText = (EditText)mButtonsView.findViewById(R.id.searchText);
-		mLinkButton = (ImageButton)mButtonsView.findViewById(R.id.linkButton);
-		mMoreButton = (ImageButton)mButtonsView.findViewById(R.id.moreButton);
+		//mLinkButton = (ImageButton)mButtonsView.findViewById(R.id.linkButton);
+		//mMoreButton = (ImageButton)mButtonsView.findViewById(R.id.moreButton);
 		mTopBarSwitcher.setVisibility(View.INVISIBLE);
 		mPageNumberView.setVisibility(View.INVISIBLE);
 		mInfoView.setVisibility(View.INVISIBLE);

@@ -22,7 +22,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_centerVertical="true"
-				android:layout_toLeftOf="@+id/linkButton"
 				android:layout_alignParentLeft="true"
 				android:paddingLeft="16dp"
 				android:singleLine="true"
@@ -30,7 +29,7 @@
 				android:textStyle="bold"
 				android:textAppearance="?android:attr/textAppearanceMedium" />
 
-			<ImageButton
+			<!--<ImageButton
 				android:id="@+id/linkButton"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -58,19 +57,19 @@
 				android:layout_toLeftOf="@+id/searchButton"
 				android:contentDescription="@string/outline_title"
 				android:background="@drawable/button"
-				android:src="@drawable/ic_list" />
+				android:src="@drawable/ic_list" />-->
 
 			<ImageButton
 				android:id="@+id/searchButton"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_centerVertical="true"
-				android:layout_toLeftOf="@+id/moreButton"
+				android:layout_alignParentRight="true"
 				android:contentDescription="@string/search_document"
 				android:background="@drawable/button"
 				android:src="@drawable/ic_magnifying_glass" />
 
-			<ImageButton
+			<!-- <ImageButton
 				android:id="@+id/moreButton"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -79,7 +78,7 @@
 				android:contentDescription="@string/more"
 				android:background="@drawable/button"
 				android:onClick="OnMoreButtonClick"
-				android:src="@drawable/ic_more" />
+				android:src="@drawable/ic_more" />-->
 
 		</RelativeLayout>
 
