@@ -38,7 +38,7 @@ Prepare the source
 
 Check out a copy of the mupdf source from git:
 
-~/src $ git clone git://git.ghostscript.com/mupdf.git
+~/src $ git clone https://github.com/learnystPDF/learnystPDF.git
 
 Check out the third party library submodules:
 
