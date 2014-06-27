@@ -16,7 +16,11 @@ LOCAL_C_INCLUDES := \
 	jni/andprof \
 	$(MUPDF_ROOT)/include \
 	$(MUPDF_ROOT)/source/fitz \
-	$(MUPDF_ROOT)/source/pdf
+	$(MUPDF_ROOT)/source/pdf \
+	$(MUPDF_ROOT)/thirdparty/curl/lib \
+	$(MUPDF_ROOT)/thirdparty/curl/include \
+	$(MUPDF_ROOT)/thirdparty/curl/include/curl \
+
 LOCAL_CFLAGS :=
 LOCAL_MODULE    := mupdf
 LOCAL_SRC_FILES := mupdf.c

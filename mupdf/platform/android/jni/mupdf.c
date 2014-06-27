@@ -306,7 +306,7 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename)
 	{
 		glo->colorspace = fz_device_rgb(ctx);
 
-		LOGE("Opening document...");
+		LOGE("Opening document... %s", filename);
 		fz_try(ctx)
 		{
 			glo->current_path = fz_strdup(ctx, (char *)filename);

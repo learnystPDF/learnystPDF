@@ -4,6 +4,8 @@ include $(CLEAR_VARS)
 
 MY_ROOT := ../..
 
+common_CFLAGS := -Wpointer-arith -Wwrite-strings -Wunused -Winline -Wnested-externs -Wmissing-declarations -Wmissing-prototypes -Wno-long-long -Wfloat-equal -Wno-multichar -Wsign-compare -Wno-format-nonliteral -Wendif-labels -Wstrict-prototypes -Wdeclaration-after-statement -Wno-system-headers -DHAVE_CURL_CONFIG_H 
+
 LOCAL_C_INCLUDES := \
 	../../thirdparty/jbig2dec \
 	../../thirdparty/openjpeg/libopenjpeg \
@@ -14,6 +16,8 @@ LOCAL_C_INCLUDES := \
 	../../scripts/freetype \
 	../../scripts/jpeg \
 	../../scripts/openjpeg \
+	../../thirdparty/curl/lib \
+	../../thirdparty/curl/include
 
 LOCAL_CFLAGS := \
 	-DFT2_BUILD_LIBRARY -DDARWIN_NO_CARBON -DHAVE_STDINT_H \
@@ -26,6 +30,8 @@ endif
 ifdef MEMENTO
 LOCAL_CFLAGS += -DMEMENTO -DMEMENTO_LEAKONLY
 endif
+
+LOCAL_CFLAGS += $(common_CFLAGS)
 
 LOCAL_MODULE := mupdfthirdparty
 LOCAL_SRC_FILES := \
@@ -131,7 +137,82 @@ LOCAL_SRC_FILES := \
 	$(MY_ROOT)/thirdparty/freetype/src/smooth/smooth.c \
 	$(MY_ROOT)/thirdparty/freetype/src/sfnt/sfnt.c \
 	$(MY_ROOT)/thirdparty/freetype/src/truetype/truetype.c \
-	$(MY_ROOT)/thirdparty/freetype/src/type1/type1.c
+	$(MY_ROOT)/thirdparty/freetype/src/type1/type1.c \
+	$(MY_ROOT)/thirdparty/curl/lib/file.c \
+	$(MY_ROOT)/thirdparty/curl/lib/timeval.c \
+	$(MY_ROOT)/thirdparty/curl/lib/base64.c \
+	$(MY_ROOT)/thirdparty/curl/lib/hostip.c \
+	$(MY_ROOT)/thirdparty/curl/lib/progress.c \
+	$(MY_ROOT)/thirdparty/curl/lib/formdata.c \
+	$(MY_ROOT)/thirdparty/curl/lib/cookie.c \
+	$(MY_ROOT)/thirdparty/curl/lib/http.c \
+	$(MY_ROOT)/thirdparty/curl/lib/sendf.c \
+	$(MY_ROOT)/thirdparty/curl/lib/ftp.c \
+	$(MY_ROOT)/thirdparty/curl/lib/url.c \
+	$(MY_ROOT)/thirdparty/curl/lib/dict.c \
+	$(MY_ROOT)/thirdparty/curl/lib/speedcheck.c \
+	$(MY_ROOT)/thirdparty/curl/lib/ldap.c \
+	$(MY_ROOT)/thirdparty/curl/lib/ssluse.c \
+	$(MY_ROOT)/thirdparty/curl/lib/version.c \
+	$(MY_ROOT)/thirdparty/curl/lib/getenv.c \
+	$(MY_ROOT)/thirdparty/curl/lib/escape.c \
+	$(MY_ROOT)/thirdparty/curl/lib/mprintf.c \
+	$(MY_ROOT)/thirdparty/curl/lib/telnet.c \
+	$(MY_ROOT)/thirdparty/curl/lib/netrc.c \
+	$(MY_ROOT)/thirdparty/curl/lib/getinfo.c \
+	$(MY_ROOT)/thirdparty/curl/lib/transfer.c \
+	$(MY_ROOT)/thirdparty/curl/lib/strequal.c \
+	$(MY_ROOT)/thirdparty/curl/lib/easy.c \
+	$(MY_ROOT)/thirdparty/curl/lib/security.c \
+	$(MY_ROOT)/thirdparty/curl/lib/krb4.c \
+	$(MY_ROOT)/thirdparty/curl/lib/krb5.c \
+	$(MY_ROOT)/thirdparty/curl/lib/memdebug.c \
+	$(MY_ROOT)/thirdparty/curl/lib/http_chunks.c \
+	$(MY_ROOT)/thirdparty/curl/lib/strtok.c \
+	$(MY_ROOT)/thirdparty/curl/lib/connect.c \
+	$(MY_ROOT)/thirdparty/curl/lib/llist.c \
+	$(MY_ROOT)/thirdparty/curl/lib/hash.c \
+	$(MY_ROOT)/thirdparty/curl/lib/multi.c \
+	$(MY_ROOT)/thirdparty/curl/lib/content_encoding.c \
+	$(MY_ROOT)/thirdparty/curl/lib/share.c \
+	$(MY_ROOT)/thirdparty/curl/lib/http_digest.c \
+	$(MY_ROOT)/thirdparty/curl/lib/md5.c \
+	$(MY_ROOT)/thirdparty/curl/lib/curl_rand.c \
+	$(MY_ROOT)/thirdparty/curl/lib/http_negotiate.c \
+	$(MY_ROOT)/thirdparty/curl/lib/inet_pton.c \
+	$(MY_ROOT)/thirdparty/curl/lib/strtoofft.c \
+	$(MY_ROOT)/thirdparty/curl/lib/strerror.c \
+	$(MY_ROOT)/thirdparty/curl/lib/hostasyn.c \
+	$(MY_ROOT)/thirdparty/curl/lib/hostip4.c \
+	$(MY_ROOT)/thirdparty/curl/lib/hostip6.c \
+	$(MY_ROOT)/thirdparty/curl/lib/hostsyn.c \
+	$(MY_ROOT)/thirdparty/curl/lib/inet_ntop.c \
+	$(MY_ROOT)/thirdparty/curl/lib/parsedate.c \
+	$(MY_ROOT)/thirdparty/curl/lib/select.c \
+	$(MY_ROOT)/thirdparty/curl/lib/gtls.c \
+	$(MY_ROOT)/thirdparty/curl/lib/sslgen.c \
+	$(MY_ROOT)/thirdparty/curl/lib/tftp.c \
+	$(MY_ROOT)/thirdparty/curl/lib/splay.c \
+	$(MY_ROOT)/thirdparty/curl/lib/strdup.c \
+	$(MY_ROOT)/thirdparty/curl/lib/socks.c \
+	$(MY_ROOT)/thirdparty/curl/lib/ssh.c \
+	$(MY_ROOT)/thirdparty/curl/lib/nss.c \
+	$(MY_ROOT)/thirdparty/curl/lib/qssl.c \
+	$(MY_ROOT)/thirdparty/curl/lib/rawstr.c \
+	$(MY_ROOT)/thirdparty/curl/lib/curl_addrinfo.c \
+	$(MY_ROOT)/thirdparty/curl/lib/socks_gssapi.c \
+	$(MY_ROOT)/thirdparty/curl/lib/socks_sspi.c \
+	$(MY_ROOT)/thirdparty/curl/lib/curl_sspi.c \
+	$(MY_ROOT)/thirdparty/curl/lib/slist.c \
+	$(MY_ROOT)/thirdparty/curl/lib/nonblock.c \
+	$(MY_ROOT)/thirdparty/curl/lib/fopen.c \
+	$(MY_ROOT)/thirdparty/curl/lib/conncache.c \
+	$(MY_ROOT)/thirdparty/curl/lib/warnless.c \
+	$(MY_ROOT)/thirdparty/curl/lib/pipeline.c \
+	$(MY_ROOT)/thirdparty/curl/lib/wildcard.c \
+	$(MY_ROOT)/thirdparty/curl/lib/bundles.c \
+	$(MY_ROOT)/thirdparty/curl/lib/fileinfo.c \
+	$(MY_ROOT)/thirdparty/curl/lib/if2ip.c
 
 LOCAL_SRC_FILES := $(addprefix ../, $(LOCAL_SRC_FILES))
 

@@ -50,7 +50,7 @@ fz_stream *fz_open_file_w(fz_context *ctx, const wchar_t *filename);
 	to fz_open_fd. When the stream is closed it will also close
 	the file descriptor.
 */
-fz_stream *fz_open_fd(fz_context *ctx, int file);
+fz_stream *fz_open_fd(fz_context *ctx, int file, char *url);
 
 /*
 	fz_open_memory: Open a block of memory as a stream.
@@ -174,6 +174,7 @@ struct fz_stream_s
 	fz_stream_seek_fn *seek;
 	fz_stream_meta_fn *meta;
 	fz_stream_rebind_fn *rebind;
+	char url[1024];
 };
 
 fz_stream *fz_new_stream(fz_context *ctx,

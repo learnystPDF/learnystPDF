@@ -785,7 +785,7 @@ endif()
 
 include(CMake/OtherTests.cmake)
 
-add_definitions(-DHAVE_CONFIG_H)
+add_definitions(-DHAVE_CURL_CONFIG_H)
 
 # For windows, do not allow the compiler to use default target (Vista).
 if(WIN32)

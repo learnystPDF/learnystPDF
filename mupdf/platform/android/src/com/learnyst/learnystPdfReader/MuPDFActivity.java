@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -304,7 +305,8 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 				if (buffer != null) {
 					core = openBuffer(buffer);
 				} else {
-					core = openFile(Uri.decode(uri.getEncodedPath()));
+					Log.e("PDF", "Opening file  " + uri.toString());
+					core = openFile(uri.toString());
 				}
 				SearchTaskResult.set(null);
 			}

@@ -1,4 +1,10 @@
 #include "mupdf/fitz.h"
+#include "../../thirdparty/curl/include/curl/curl.h"
+
+#define CURL_TRUE 1
+#define CURL_FALSE 0
+
+int isHttpUrl = CURL_FALSE;
 
 void fz_rebind_stream(fz_stream *stm, fz_context *ctx)
 {
@@ -81,43 +87,84 @@ typedef struct fz_file_stream_s
 
 static int next_file(fz_stream *stm, int n)
 {
-	fz_file_stream *state = stm->state;
+	if (isHttpUrl == CURL_FALSE)
+	{
+		fz_file_stream *state = stm->state;
 
-	/* n is only a hint, that we can safely ignore */
-	n = read(state->file, state->buffer, sizeof(state->buffer));
-	if (n < 0)
-		fz_throw(stm->ctx, FZ_ERROR_GENERIC, "read error: %s", strerror(errno));
-	stm->rp = state->buffer;
-	stm->wp = state->buffer + n;
-	stm->pos += n;
+		/* n is only a hint, that we can safely ignore */
+		n = read(state->file, state->buffer, sizeof(state->buffer));
+		if (n < 0)
+			fz_throw(stm->ctx, FZ_ERROR_GENERIC, "read error: %s", strerror(errno));
+		stm->rp = state->buffer;
+		stm->wp = state->buffer + n;
+		stm->pos += n;
 
-	if (n == 0)
-		return EOF;
-	return *stm->rp++;
+		if (n == 0)
+			return EOF;
+		return *stm->rp++;
+	}
+	else
+	{
+		fz_file_stream *state = stm->state;
+
+		/* n is only a hint, that we can safely ignore */
+		n = curl_read(state->buffer, sizeof(state->buffer), stm->pos, stm->url);
+		if (n < 0)
+			fz_throw(stm->ctx, FZ_ERROR_GENERIC, "read error: %s", strerror(errno));
+		stm->rp = state->buffer;
+		stm->wp = state->buffer + n;
+		stm->pos += n;
+
+		if (n == 0)
+			return EOF;
+		return *stm->rp++;
+	}
 }
 
 static void seek_file(fz_stream *stm, int offset, int whence)
 {
-	fz_file_stream *state = stm->state;
-	int n = lseek(state->file, offset, whence);
-	if (n < 0)
-		fz_throw(stm->ctx, FZ_ERROR_GENERIC, "cannot lseek: %s", strerror(errno));
-	stm->pos = n;
-	stm->rp = state->buffer;
-	stm->wp = state->buffer;
+	if (isHttpUrl == CURL_FALSE)
+	{
+		fz_file_stream *state = stm->state;
+		int n = lseek(state->file, offset, whence);
+		if (n < 0)
+			fz_throw(stm->ctx, FZ_ERROR_GENERIC, "cannot lseek: %s", strerror(errno));
+		stm->pos = n;
+		stm->rp = state->buffer;
+		stm->wp = state->buffer;
+	}
+	else
+	{
+		fz_file_stream *state = stm->state;
+		int n = curl_seek(stm->pos, offset, whence);
+		if (n < 0)
+			fz_throw(stm->ctx, FZ_ERROR_GENERIC, "Seek failed for http ");
+		stm->pos = n;
+		stm->rp = state->buffer;
+		stm->wp = state->buffer;
+	}
 }
 
 static void close_file(fz_context *ctx, void *state_)
 {
-	fz_file_stream *state = state_;
-	int n = close(state->file);
-	if (n < 0)
-		fz_warn(ctx, "close error: %s", strerror(errno));
-	fz_free(ctx, state);
+	if (isHttpUrl == CURL_FALSE)
+	{
+		fz_file_stream *state = state_;
+		int n = close(state->file);
+		if (n < 0)
+			fz_warn(ctx, "close error: %s", strerror(errno));
+		fz_free(ctx, state);
+	}
+	else
+	{
+		curl_close();
+		fz_file_stream *state = state_;
+		fz_free(ctx, state);
+	}
 }
 
 fz_stream *
-fz_open_fd(fz_context *ctx, int fd)
+fz_open_fd(fz_context *ctx, int fd, char* name)
 {
 	fz_stream *stm;
 	fz_file_stream *state = fz_malloc_struct(ctx, fz_file_stream);
@@ -133,6 +180,7 @@ fz_open_fd(fz_context *ctx, int fd)
 		fz_rethrow(ctx);
 	}
 	stm->seek = seek_file;
+	strcpy(stm->url, name);
 
 	return stm;
 }
@@ -140,6 +188,10 @@ fz_open_fd(fz_context *ctx, int fd)
 fz_stream *
 fz_open_file(fz_context *ctx, const char *name)
 {
+	int fd;
+
+	printf("fz_open_file %s", name);
+
 #ifdef _WIN32
 	char *s = (char*)name;
 	wchar_t *wname, *d;
@@ -153,11 +205,37 @@ fz_open_file(fz_context *ctx, const char *name)
 	fd = _wopen(wname, O_BINARY | O_RDONLY, 0);
 	fz_free(ctx, wname);
 #else
-	int fd = open(name, O_BINARY | O_RDONLY, 0);
+	if ((name[0] == 'h')
+		&& (name[1] == 't')
+		&& (name[2] == 't')
+		&& (name[3] == 'p'))
+	{
+		isHttpUrl = CURL_TRUE;
+	}
+	else
+	{
+		isHttpUrl = CURL_FALSE;
+	}
+
+	if (CURL_FALSE == isHttpUrl)
+	{
+		fd = open(name, O_BINARY | O_RDONLY, 0);
+	}
+	else
+	{
+		fd = curl_fopen(name);
+		if (fd != 0)
+		{
+			fz_throw(ctx, FZ_ERROR_GENERIC, "cannot open %s", name);
+		}
+
+		return fz_open_fd(ctx, -1, name); //fd not required. pass invalid so that we know when access by mistake
+	}
+
 #endif
 	if (fd == -1)
 		fz_throw(ctx, FZ_ERROR_GENERIC, "cannot open %s", name);
-	return fz_open_fd(ctx, fd);
+	return fz_open_fd(ctx, fd, name);
 }
 
 #ifdef _WIN32
