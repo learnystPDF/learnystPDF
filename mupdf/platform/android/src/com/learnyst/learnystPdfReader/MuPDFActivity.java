@@ -1083,7 +1083,9 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 
 	@Override
 	public void onBackPressed() {
-		if (core.hasChanges()) {
+		super.onBackPressed();
+		
+		/*if (core.hasChanges()) {
 			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					if (which == AlertDialog.BUTTON_POSITIVE)
@@ -1100,7 +1102,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 			alert.show();
 		} else {
 			super.onBackPressed();
-		}
+		}*/
 	}
 
 	@Override
