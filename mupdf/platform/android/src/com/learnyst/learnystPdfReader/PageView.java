@@ -212,6 +212,13 @@ public abstract class PageView extends ViewGroup {
 
 	public void releaseBitmaps() {
 		reinit();
+		
+		if (mEntireBm != null)
+			mEntireBm.recycle();
+		
+		if (mPatchBm != null)
+			mPatchBm.recycle();
+		
 		mEntireBm = null;
 		mPatchBm = null;
 	}

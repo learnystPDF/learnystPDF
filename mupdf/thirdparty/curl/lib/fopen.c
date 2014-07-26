@@ -4,7 +4,7 @@
 #include <file.h>
 #include <android/log.h>
 
-#define READ_SIZE_PER_TIME (32 * 1024)
+#define READ_SIZE_PER_TIME (4 * 1024)
 #define MAX_READ_SIZE  (READ_SIZE_PER_TIME * 2)
 
 #define CURL_TRUE 1
@@ -111,6 +111,7 @@ int curl_fopen(char *url)
 {
   int ret = 0;
   
+  contentLen = -1;
   LOGE("OPENING CURL URL %s", url);
   ret = curl_read(tempBuffer, 100, 0, url);
 
@@ -239,6 +240,7 @@ int curl_seek(int curPos, int offset, int whence)
 
 int curl_close()
 {
+  contentLen = -1;
   LOGE("curl_close");
   return 0;
 }
